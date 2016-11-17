@@ -18,6 +18,9 @@
     </div>
     <div id="loading">Loading...</div>
     <script src='./lib/fhir-client.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+   
+   
     <script>
       function ready(smart) {
         var patient = smart.api.read({type: 'Patient', id: '711924'}).then(function(response) {
@@ -29,7 +32,16 @@
           document.body.innerText = "Launch first.";
         }
       }
- 
+      extractData().then(
+        //Display Patient Demographics and Observations if extractData was success
+        function(p) {
+          drawVisualization(p);
+        },
+        //Display 'Failed to call FHIR Service' if extractData failed
+        function() {
+          $('#errors').html('<p> Failed to call FHIR Service </p>');
+        }
+      );
       FHIR.oauth2.ready(ready, notReady);
         
     
